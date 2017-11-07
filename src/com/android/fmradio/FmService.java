@@ -102,7 +102,7 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
     private static final int NOTIFICATION_ID = 1;
 
     // ignore audio data
-    private static final int AUDIO_FRAMES_TO_IGNORE_COUNT = 1;
+    private static final int AUDIO_FRAMES_TO_IGNORE_COUNT = 3;
 
     // Set audio policy for FM
     // should check AUDIO_POLICY_FORCE_FOR_MEDIA in audio_policy.h
@@ -450,7 +450,7 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
     private Thread mRenderThread = null;
     private AudioRecord mAudioRecord = null;
     private AudioTrack mAudioTrack = null;
-    private static final int SAMPLE_RATE = 48000;
+    private static final int SAMPLE_RATE = 44100;
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_CONFIGURATION_STEREO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static final int RECORD_BUF_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE,
@@ -769,6 +769,7 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
     private boolean tuneStation(float frequency) {
         if (mPowerStatus == POWER_UP) {
             setRds(false);
+            setMute(true);
             boolean bRet = mFmNative.tune(frequency);
             if (bRet) {
                 setRds(true);
@@ -1005,7 +1006,6 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
         if (mute) {mAudioManager.setParameters("fmradio=off;");}
         else {
           mAudioManager.setParameters("fmradio=on;");
-          mFmNative.setFMVolume( mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
         }
         mIsMuted = mute;
         return iRet;
@@ -1493,7 +1493,7 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
         exitRenderThread();
         releaseAudioPatch();
         unregisterAudioPortUpdateListener();
-        //mFmNative = null;
+        mFmNative = null;
         super.onDestroy();
     }
 

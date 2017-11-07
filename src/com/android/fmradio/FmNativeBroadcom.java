@@ -369,7 +369,7 @@ public class FmNativeBroadcom extends FmNative implements IFmProxyCallback, IFmR
     }
 
     public int isRdsSupport() {
-    	return 0;
+    	return 1;
     }
 
     public int switchAntenna(int antenna) {

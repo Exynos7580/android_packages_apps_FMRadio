@@ -247,16 +247,24 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     boolean isEnabled = bluetoothAdapter.isEnabled();
                     if (isEnabled) {
-                    bluetoothAdapter.disable();
-                    SystemClock.sleep(2000);
-                    bluetoothAdapter.enable();
-
+                       bluetoothAdapter.disable();
+                       while (bluetoothAdapter.getState()!=10) {
+                             SystemClock.sleep(100);
+                       }
+                       bluetoothAdapter.enable();
+                       while (bluetoothAdapter.getState()!=12) {
+                             SystemClock.sleep(100);
+                       }
                     }
                     else {
-                    bluetoothAdapter.enable();
-                    SystemClock.sleep(2000);
-                    bluetoothAdapter.disable();
-
+                         bluetoothAdapter.enable();
+                         while (bluetoothAdapter.getState()!=12) {
+                               SystemClock.sleep(100);
+                         }
+                         bluetoothAdapter.disable();
+                         while (bluetoothAdapter.getState()!=10) {
+                               SystemClock.sleep(100);
+                         }
                     }
                     //FIXME end
                     break;
