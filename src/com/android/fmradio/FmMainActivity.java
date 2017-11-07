@@ -17,6 +17,7 @@
 package com.android.fmradio;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -50,6 +51,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import android.os.SystemClock;
+
+
 
 import com.android.fmradio.FmStation.Station;
 import com.android.fmradio.dialogs.FmFavoriteEditDialog;
@@ -238,6 +242,23 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                     }
                     // if not powerup success, refresh power to enable.
                     refreshPlayButton(true);
+                    
+                   //FIXME start - this hack now for proper enable FM - without no sound
+                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    boolean isEnabled = bluetoothAdapter.isEnabled();
+                    if (isEnabled) {
+                    bluetoothAdapter.disable();
+                    SystemClock.sleep(2000);
+                    bluetoothAdapter.enable();
+
+                    }
+                    else {
+                    bluetoothAdapter.enable();
+                    SystemClock.sleep(2000);
+                    bluetoothAdapter.disable();
+
+                    }
+                    //FIXME end
                     break;
 
                 case FmListener.MSGID_SWITCH_ANTENNA:
@@ -503,7 +524,7 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
         initUiComponent();
         registerButtonClickListener();
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
+        //mAudioManager.setParameters("fmradio=on;");
         mScroller = (FmScroller) findViewById(R.id.multiscroller);
         mScroller.initialize();
         mEventListener = new EventListener() {
@@ -528,6 +549,7 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
 
             @Override
             public void onPlay(int frequency) {
+                //mAudioManager.setParameters("fmradio=on;");
                 if (frequency != 0 && (mService.getPowerStatus() == FmService.POWER_UP)) {
                     tuneStation(frequency);
                 }
@@ -709,6 +731,7 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
             unbindService(mServiceConnection);
             mIsServiceBinded = false;
         }
+        //mAudioManager.setParameters("fmradio=off;");
         super.onStop();
     }
 
@@ -726,6 +749,7 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
             mService.unregisterFmRadioListener(mFmRadioListener);
         }
         mFmRadioListener = null;
+        //mAudioManager.setParameters("fmradio=off;");
         mScroller.closeAdapterCursor();
         mScroller.unregisterListener(mEventListener);
         super.onDestroy();

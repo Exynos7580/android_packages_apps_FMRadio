@@ -30,7 +30,6 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;

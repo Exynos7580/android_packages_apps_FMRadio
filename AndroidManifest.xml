@@ -32,6 +32,7 @@
     <uses-permission android:name="android.permission.ACCESS_FM_RADIO" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_ROUTING" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -86,6 +87,11 @@
             android:theme="@style/LightTheme"
             android:launchMode="singleTask" >
         </activity>
+        <receiver android:exported="false" android:name="com.android.fmradio.FmReceiver">
+            <intent-filter>
+                <action android:name="android.media.VOLUME_CHANGED_ACTION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
