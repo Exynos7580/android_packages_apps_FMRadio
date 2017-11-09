@@ -18,6 +18,7 @@ package com.android.fmradio;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothProfile;
 import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -204,8 +205,10 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                 case R.id.play_button:
                     if (mService.getPowerStatus() == FmService.POWER_UP) {
                         powerDownFm();
+                        mAudioManager.setParameters("fmradio=off;");
                     } else {
                         powerUpFm();
+                        mAudioManager.setParameters("fmradio=on;");
                     }
                     break;
                 default:
@@ -249,6 +252,7 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                     boolean hasAntenna = bundle.getBoolean(FmListener.KEY_IS_SWITCH_ANTENNA);
                     // if receive headset plug out, need set headset mode on ui
                     if (hasAntenna) {
+                        mAudioManager.setParameters("fmradio=on;");
                         if (mIsActivityForeground) {
                             cancelNoHeadsetAnimation();
                             playMainAnimation();
@@ -256,6 +260,7 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                             changeToMainLayout();
                         }
                     } else {
+                        mAudioManager.setParameters("fmradio=off;");
                         mMenuItemHeadset.setIcon(R.drawable.btn_fm_headset_selector);
                         if (mIsActivityForeground) {
                             cancelMainAnimation();

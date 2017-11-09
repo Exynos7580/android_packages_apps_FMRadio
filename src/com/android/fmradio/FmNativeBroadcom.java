@@ -133,14 +133,6 @@ public class FmNativeBroadcom extends FmNative implements IFmProxyCallback, IFmR
             } catch (Exception e) {
                     return false;
             }
-            //if (mFmReceiver.setFMVolume(150) != FmProxy.STATUS_OK) {
-            //        return false;
-            //}
-            //try {
-            //    this.wait(TIMEOUT);
-            //} catch (Exception e) {
-            //        return false;
-            //}
 
     	    return true;
     	}
@@ -305,6 +297,46 @@ public class FmNativeBroadcom extends FmNative implements IFmProxyCallback, IFmR
     	    return 0;
     	}
     }
+
+    public boolean setAudioMode(int audiomode) {
+        synchronized (this) {
+            if (mFmReceiver == null) {
+                    return false;
+            }
+
+            if (mFmReceiver.setAudioMode(audiomode) != FmProxy.STATUS_OK) {
+                    return false;
+            }
+            try {
+                this.wait(TIMEOUT);
+            } catch (Exception e) {
+                    return false;
+            }
+            notify();
+            return true;
+        
+        }
+    }
+
+    public int getMonoStereo() {
+        int mode = 0;
+        synchronized (this) {
+            if (mFmReceiver == null) {
+                    return -1;
+            }
+
+            try {
+                mode = mFmReceiver.getMonoStereoMode();
+            } catch (Exception e) {
+                    return -1;
+            }
+            return mode;
+
+        }
+    }
+
+
+
 
     public byte[] getPs() {
         synchronized (this) {

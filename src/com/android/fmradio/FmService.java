@@ -17,12 +17,12 @@
 package com.android.fmradio;
 
 import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothProfile;
 import android.app.Notification;
 import android.app.Notification.BigTextStyle;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -279,9 +279,7 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
                 setRdsAsync(false);
                 // switch antenna when headset plug in or plug out
             } else if (Intent.ACTION_HEADSET_PLUG.equals(action)) {
-                // switch antenna should not impact audio focus status
                 mValueHeadSetPlug = (intent.getIntExtra("state", -1) == HEADSET_PLUG_IN) ? 0 : 1;
-
                 // Avoid Service is killed,and receive headset plug in
                 // broadcast again
                 if (!mIsServiceInited) {
@@ -1003,10 +1001,10 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
             return -1;
         }
         int iRet = mFmNative.setMute(mute);
-        if (mute) {mAudioManager.setParameters("fmradio=off;");}
-        else {
-          mAudioManager.setParameters("fmradio=on;");
-        }
+//        if (mute) {mAudioManager.setParameters("fmradio=off;");}
+//        else {
+//          mAudioManager.setParameters("fmradio=on;");
+//        }
         mIsMuted = mute;
         return iRet;
     }
@@ -1552,7 +1550,7 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
      * Start RDS thread to update RDS information
      */
     private void startRdsThread() {
-        mIsRdsThreadExit = true;
+        mIsRdsThreadExit = false;
         if (null != mRdsThread) {
             return;
         }
