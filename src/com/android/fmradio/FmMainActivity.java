@@ -242,31 +242,6 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                     }
                     // if not powerup success, refresh power to enable.
                     refreshPlayButton(true);
-                    
-                   //FIXME start - this hack now for proper enable FM - without no sound
-                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    boolean isEnabled = bluetoothAdapter.isEnabled();
-                    if (isEnabled) {
-                       bluetoothAdapter.disable();
-                       while (bluetoothAdapter.getState()!=10) {
-                             SystemClock.sleep(100);
-                       }
-                       bluetoothAdapter.enable();
-                       while (bluetoothAdapter.getState()!=12) {
-                             SystemClock.sleep(100);
-                       }
-                    }
-                    else {
-                         bluetoothAdapter.enable();
-                         while (bluetoothAdapter.getState()!=12) {
-                               SystemClock.sleep(100);
-                         }
-                         bluetoothAdapter.disable();
-                         while (bluetoothAdapter.getState()!=10) {
-                               SystemClock.sleep(100);
-                         }
-                    }
-                    //FIXME end
                     break;
 
                 case FmListener.MSGID_SWITCH_ANTENNA:
