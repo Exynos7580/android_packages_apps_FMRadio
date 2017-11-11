@@ -125,6 +125,16 @@ public class FmNativeBroadcom extends FmNative implements IFmProxyCallback, IFmR
             } catch (Exception e) {
                     return false;
             }
+    	    if (mFmReceiver.setFMVolume(255) != FmProxy.STATUS_OK) {
+        	    return false;
+    	    }
+    	    try {
+                this.wait(TIMEOUT);
+            } catch (Exception e) {
+        	    return false;
+            }
+
+
             if (mFmReceiver.setAudioPath(FmProxy.AUDIO_PATH_DIGITAL) != FmProxy.STATUS_OK) {
                     return false;
             }
@@ -133,7 +143,6 @@ public class FmNativeBroadcom extends FmNative implements IFmProxyCallback, IFmR
             } catch (Exception e) {
                     return false;
             }
-
     	    return true;
     	}
     }
