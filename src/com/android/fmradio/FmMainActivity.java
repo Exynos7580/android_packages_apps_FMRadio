@@ -206,9 +206,13 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                     if (mService.getPowerStatus() == FmService.POWER_UP) {
                         powerDownFm();
                         mAudioManager.setParameters("fmradio=off;");
+                        mAudioManager.setParameters("fm_mode=off;");
+                        mAudioManager.setParameters("fm_radio_volume=off;");
                     } else {
                         powerUpFm();
                         mAudioManager.setParameters("fmradio=on;");
+                        mAudioManager.setParameters("fm_mode=on;");
+                        mAudioManager.setParameters("fm_radio_volume=on;");
                     }
                     break;
                 default:
@@ -253,6 +257,8 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                     // if receive headset plug out, need set headset mode on ui
                     if (hasAntenna) {
                         mAudioManager.setParameters("fmradio=on;");
+                        mAudioManager.setParameters("fm_mode=on;");
+                        mAudioManager.setParameters("fm_radio_volume=on;");
                         if (mIsActivityForeground) {
                             cancelNoHeadsetAnimation();
                             playMainAnimation();
@@ -261,6 +267,8 @@ public class FmMainActivity extends Activity implements FmFavoriteEditDialog.Edi
                         }
                     } else {
                         mAudioManager.setParameters("fmradio=off;");
+                        mAudioManager.setParameters("fm_mode=off;");
+                        mAudioManager.setParameters("fm_radio_volume=off;");
                         mMenuItemHeadset.setIcon(R.drawable.btn_fm_headset_selector);
                         if (mIsActivityForeground) {
                             cancelMainAnimation();
